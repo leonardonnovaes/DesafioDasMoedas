@@ -33,6 +33,36 @@ def qtdeMoedas(M, moedas):
     return count if M == 0 else -1
 
 
+def qtdeMoedasRec(M, moedas):
+    """
+    Função Recursiva Pura (Sem Memoização)
+    -----------------------------------------
+    Calcula recursivamente o número mínimo de moedas para formar M.
+    Testa todas as combinações possíveis, o que gera reprocessamentos.
+
+    Parâmetros:
+    M (int): montante total.
+    moedas (list[int]): lista de valores das moedas disponíveis.
+
+    Retorno:
+    int: quantidade mínima de moedas ou -1 se não for possível formar M.
+
+    Complexidade:
+    - Tempo: O(2^M), pois há sobreposição de subproblemas.
+    - Melhor caso (Ω): O(1), se M = 0.
+    - Pior caso (Θ): O(2^M).
+    """
+    if M == 0:
+        return 0
+    if M < 0:
+        return float('inf')
+
+    min_moedas = float('inf')
+    for moeda in moedas:
+        resultado = qtdeMoedasRec(M - moeda, moedas)
+        min_moedas = min(min_moedas, resultado + 1)
+
+    return min_moedas if min_moedas != float('inf') else -1
 
 
 
@@ -43,3 +73,4 @@ def qtdeMoedas(M, moedas):
 # ===============================
 if __name__ == "__main__":
     print("Gulosa:", qtdeMoedas(6, [1, 3, 4]))
+    print("Recursiva:", qtdeMoedasRec(6, [1, 3, 4]))
