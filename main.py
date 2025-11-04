@@ -64,7 +64,43 @@ def qtdeMoedasRec(M, moedas):
 
     return min_moedas if min_moedas != float('inf') else -1
 
+def qtdeMoedasRecMemo(M, moedas, memo=None):
+    """
+    Função Recursiva com Memoização (Top-Down)
+    ----------------------------------------------
+    Usa cache (memo) para armazenar resultados já calculados.
+    Evita o reprocessamento dos mesmos subproblemas.
 
+    Parâmetros:
+    M (int): montante total.
+    moedas (list[int]): lista de valores das moedas disponíveis.
+    memo (dict): dicionário usado para armazenar subresultados.
+
+    Retorno:
+    int: quantidade mínima de moedas ou -1 se não for possível formar M.
+
+    Complexidade:
+    - Tempo: O(M * n), onde n é o número de moedas.
+    - Melhor caso (Ω): O(M).
+    - Pior caso (Θ): O(M * n).
+    """
+    if memo is None:
+        memo = {}
+
+    if M in memo:
+        return memo[M]
+    if M == 0:
+        return 0
+    if M < 0:
+        return float('inf')
+
+    min_moedas = float('inf')
+    for moeda in moedas:
+        resultado = qtdeMoedasRecMemo(M - moeda, moedas, memo)
+        min_moedas = min(min_moedas, resultado + 1)
+
+    memo[M] = min_moedas
+    return min_moedas if min_moedas != float('inf') else -1
 
 
 
@@ -74,3 +110,4 @@ def qtdeMoedasRec(M, moedas):
 if __name__ == "__main__":
     print("Gulosa:", qtdeMoedas(6, [1, 3, 4]))
     print("Recursiva:", qtdeMoedasRec(6, [1, 3, 4]))
+    print("Recursiva Memo:", qtdeMoedasRecMemo(6, [1, 3, 4]))
