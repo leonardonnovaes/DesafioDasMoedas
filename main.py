@@ -102,7 +102,34 @@ def qtdeMoedasRecMemo(M, moedas, memo=None):
     memo[M] = min_moedas
     return min_moedas if min_moedas != float('inf') else -1
 
+def qtdeMoedasPD(M, moedas):
+    """
+    Programação Dinâmica (Bottom-Up)
+    ----------------------------------
+    Constrói uma tabela dp onde dp[i] representa o número mínimo de moedas
+    necessário para formar o valor i. Resolve o problema de forma iterativa.
 
+    Parâmetros:
+    M (int): montante total.
+    moedas (list[int]): lista de valores das moedas disponíveis.
+
+    Retorno:
+    int: quantidade mínima de moedas ou -1 se não for possível formar M.
+
+    Complexidade:
+    - Tempo: O(M * n)
+    - Melhor caso (Ω): O(M)
+    - Pior caso (Θ): O(M * n)
+    """
+    dp = [float('inf')] * (M + 1)
+    dp[0] = 0
+
+    for i in range(1, M + 1):
+        for moeda in moedas:
+            if i - moeda >= 0:
+                dp[i] = min(dp[i], dp[i - moeda] + 1)
+
+    return dp[M] if dp[M] != float('inf') else -1
 
 # ===============================
 # TESTES DE EXEMPLO
@@ -111,3 +138,4 @@ if __name__ == "__main__":
     print("Gulosa:", qtdeMoedas(6, [1, 3, 4]))
     print("Recursiva:", qtdeMoedasRec(6, [1, 3, 4]))
     print("Recursiva Memo:", qtdeMoedasRecMemo(6, [1, 3, 4]))
+    print("PD Bottom-Up:", qtdeMoedasPD(6, [1, 3, 4]))
